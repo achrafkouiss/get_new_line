@@ -6,100 +6,78 @@
 /*   By: akouiss <akouiss@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:05:15 by akouiss           #+#    #+#             */
-/*   Updated: 2025/11/21 18:23:23 by akouiss          ###   ########.fr       */
+/*   Updated: 2025/11/21 22:35:05 by akouiss          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(char const *str)
+size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (str[i])
+	while (s && s[i])
 		i++;
 	return (i);
 }
 
 char	*ft_strdup(const char *s)
 {
+	char	*ptr;
 	size_t	i;
-	size_t	s_size;
-	char	*new_arr;
 
-	s_size = ft_strlen(s) + 1;
-	new_arr = malloc(sizeof(char) * s_size);
-	if (!new_arr)
+	if (!s)
+		return (NULL);
+	ptr = malloc(ft_strlen(s) + 1);
+	if (!ptr)
 		return (NULL);
 	i = 0;
 	while (s[i])
 	{
-		new_arr[i] = s[i];
+		ptr[i] = s[i];
 		i++;
 	}
-	new_arr[i] = '\0';
-	return (new_arr);
+	ptr[i] = '\0';
+	return (ptr);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+char	*ft_strchr(char *s, int c)
 {
-	size_t	arr_size;
-	char	*new_arr;
-	size_t	i;
-
-	if (!nmemb || !size)
-		return (malloc(0));
-	if ((size_t)-1 / size < nmemb)
+	if (!s)
 		return (NULL);
-	arr_size = size * nmemb;
-	new_arr = malloc(arr_size);
-	if (!new_arr)
-		return (NULL);
-	i = 0;
-	while (i < arr_size)
-		new_arr[i++] = 0;
-	return (new_arr);
-}
-
-char	*ft_strchr(char *str, int c)
-{
-	if (!str)
-		return (NULL);
-	while (*str)
+	while (*s)
 	{
-		if (*str == (char)c)
-			return (str);
-		str++;
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
 	}
-	if ((char)c == '\0')
-		return (str);
+	if (c == '\0')
+		return ((char *)s);
 	return (NULL);
 }
 
-char	*ft_allo_line(char *buffer)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*line;
-	int		size;
-	int		i;
-	char	*nl;
+	char	*new;
+	size_t	i;
+	size_t	j;
 
-	nl = ft_strchr(buffer, '\n');
-	if (!nl)
-		return (ft_strdup(buffer));
-	size = (nl - buffer) + 2;
-	line = ft_calloc(size, sizeof(char));
-	if (!line)
-	{
-		free(buffer);
+	if (!s1 && !s2)
 		return (NULL);
-	}
+	new = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!new)
+		return (NULL);
 	i = 0;
-	while (i < size - 1)
+	while (s1 && s1[i])
 	{
-		line[i] = buffer[i];
+		new[i] = s1[i];
 		i++;
 	}
-	line[i] = '\0';
-	return (line);
+	j = 0;
+	while (s2 && s2[j])
+		new[i++] = s2[j++];
+	new[i] = '\0';
+	free(s1);
+	return (new);
 }
